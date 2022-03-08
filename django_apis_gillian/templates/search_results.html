@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Giggle Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/materia/bootstrap.min.css" />
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Giggle Search</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/giggle-news/">Giggle News</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="jumbotron shadow">
+        <div class="container">
+            <h1 class="display-2">{{ search_message }} <span class="badge badge-primary">{{ search_term }}</span></h1>
+            <p class="lead">
+                {{ results_count }} results found
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Display music results -->
+    <div class="container">
+        <div class="row">
+            {% for album in music_results %}
+                <div class="col-md-4">
+                    <div class="card shadow text-center mb-5">
+                        <img class="card-img-top" src="http://coverartarchive.org/release/{{ album.id }}/front" />
+                        <div class="card-body">
+                            <h5 class="card-title">{{ album.title }}</h5>
+                            <p class="card-text">{{ album.date }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Display Books -->
+    <div class="container">
+        <div class="row">
+            {% for book in book_results %}
+                <div class="col-md-4">
+                    <div class="card shadow text-center mb-5">
+                        <img class="card-img-top" src="http://covers.openlibrary.org/b/id/{{book.cover_i}}-M.jpg" />
+                        <div class="card-body">
+                            <h4 class="card-title">{{ book.title }}</h4>
+                            <p class="card-text">by {{ book.author_name|first }}</p>
+                            {% if book.first_publish_year %}
+                                <p><strong>Year Published:</strong> {{ book.first_publish_year }}<br />
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <!-- Display Headlines -->
+    <div class="container">
+        {% for item in news_results %}
+            <div class="row mb-3">
+                <div class="col-md-3 text-right text-muted">
+                    <h2>{{ item.sectionName }}</h2>
+                    <h4>{{ item.webPublicationDate }}</h4>
+                </div>
+                <div class="col">
+                    <a href="{{ item.webUrl }}">
+                        <h1>{{ item.webTitle }}</h1>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <!-- Advanced Bonus Challenge: Pagination -->
+    <div class="justify-content-center d-flex">
+        {% if current_page > 1 %}
+            <form>
+                <input type="hidden" name="searchterm" value="{{ search_term }}" />
+                <input type="hidden" name="stype" value="{{ search_type }}" />
+                <input type="hidden" name="page_number" value="{{ previous_page_number }}" />
+                <button class="btn btn-lg btn-primary">&laquo;</button>
+            </form>
+        {% endif %}
+
+        <button class="btn btn-lg btn-secondary">{{ current_page }}</button>
+
+        {% if current_page < page_count %}
+            <form>
+                <input type="hidden" name="searchterm" value="{{ search_term }}" />
+                <input type="hidden" name="stype" value="{{ search_type }}" />
+                <input type="hidden" name="page_number" value="{{ next_page_number }}" />
+                <button class="btn btn-lg btn-primary">&raquo;</button>
+            </form>
+        {% endif %}
+    </div>
+
+
+</body>
+</html>
