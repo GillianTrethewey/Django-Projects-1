@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Adoption statistics:</h2>
+<p>Number of shibas up for adoption: {{ shiba_count }}</p>
+
+<h2>Shibas up for adoption:</h2>
+<a href="/?reverse=true" class="btn btn-primary">Reversed</a>
+{% for shiba in all_shibas %}
+    <div class="row">
+        <div class="col">
+            <img class="img-fluid" src="{{ shiba.image_src }}" />
+        </div>
+        <div class="col">
+            <h3>Shiba name: {{ shiba.name }}</h3>
+            <h4>Shiba age: {{ shiba.age }}</h4>
+            <p>Wow, such shiba, much bork!</p>
+            <form action="/adopt-a-shiba/" method="POST">
+                {% csrf_token %}
+                <input name="number" type="hidden" value="{{ shiba.id }}" />
+                <button class="btn btn-success">Adopt and remove</button>
+            </form>
+
+        </div>
+    </div>
+{% endfor %}
+{% endblock content %}
